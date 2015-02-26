@@ -1,13 +1,11 @@
-package example
+package mz
 
 import utest._
 
-object ScalaJSExampleTest extends TestSuite {
-
-  import ScalaJSExample._
-
+object MainTest extends TestSuite {
+  import Main._
   def tests = TestSuite {
-    'ScalaJSExample {
+    'Main {
       assert(square(0) == 0)
       assert(square(4) == 16)
       assert(square(-5) == 25)
