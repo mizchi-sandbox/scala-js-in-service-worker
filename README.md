@@ -1,29 +1,49 @@
-# Example application written in Scala.js
+# Scala.js in ServiceWorker
 
-This is a barebone example of an application written in
-[Scala.js](https://www.scala-js.org/).
+This is an experimental project.
 
-## Get started
+Scala.js works in service worker with network proxy, [mizchi/sabizan](https://github.com/mizchi/sabizan "mizchi/sabizan")
 
-To get started, open `sbt` in this example project, and execute the task
-`fastOptJS`. This creates the file `target/scala-2.11/example-fastopt.js`.
-You can now open `index-fastopt.html` in your favorite Web browser!
+## Example
 
-During development, it is useful to use `~fastOptJS` in sbt, so that each
-time you save a source file, a compilation of the project is triggered.
-Hence only a refresh of your Web page is needed to see the effects of your
-changes.
+It works in ServiceWorker.
 
-## Run the tests
+```scala
+package mz
+import scala.scalajs.js
+import js.annotation.JSExport
+import js.Dynamic.global
 
-To run the test suite, execute the task `test`. If you have installed
-[Node.js](http://nodejs.org/), you can also run `fastOptStage::test` which is
-faster.
+object Main extends js.JSApp {
+  def main(): Unit = {
+    global.proxy.get("/users/:id", (m: js.Dynamic) => {
+      js.Dynamic.literal(`id` = m.id)
+    })
+  }
+}
+```
 
-## The fully optimized version
+It respond to requests from client
 
-For ultimate code size reduction, use `fullOptJS`. This will take several
-seconds to execute, so typically you only use this for the final, production
-version of your application. While `index-fastopt.html` refers to the
-JavaScript emitted by `fastOptJS`, `index.html` refers to the optimized
-JavaScript emitted by `fullOptJS`.
+```js
+fetch('api/users/mizchi').then(function(d){return d.json()}).then(console.log.bind(console))
+//=> Object {id: "mizchi"}
+```
+
+## How to work
+
+Build
+
+```
+npm install
+./build.sh
+```
+
+Run localhost server by your way
+
+```
+cd public/
+python -m SimpleHTTPServer 4000
+```
+
+open `http://localhost:4000` and reload twice. (This aciton is work around. Need to activate ServiceWorker)

@@ -1,16 +1,12 @@
 package mz
-
 import scala.scalajs.js
 import js.annotation.JSExport
-import org.scalajs.dom
+import js.Dynamic.global
 
 object Main extends js.JSApp {
   def main(): Unit = {
-    println("loaded")
+    global.proxy.get("/users/:id", (m: js.Dynamic) => {
+      js.Dynamic.literal(`id` = m.id)
+    })
   }
-
-  /** Computes the square of an integer.
-   *  This demonstrates unit testing.
-   */
-  def square(x: Int): Int = x*x
 }
